@@ -6,8 +6,9 @@ import { Product, ProductDocument } from './schemas/product.schema';
 
 @Injectable()
 export class ProductsService {
-  // eslint-disable-next-line prettier/prettier
-  constructor(@InjectModel(Product.name) private productModel: Model<ProductDocument>) {}
+  constructor(
+    @InjectModel(Product.name) private productModel: Model<ProductDocument>,
+  ) {}
 
   async getAll(): Promise<Product[]> {
     return this.productModel.find().exec();
@@ -20,5 +21,9 @@ export class ProductsService {
   async create(product: ProductDTO): Promise<Product> {
     const newProduct = new this.productModel(product);
     return newProduct.save();
+  }
+
+  delete(id: string): Promise<Product> {
+    return this.productModel.findByIdAndRemove(id);
   }
 }
